@@ -1,0 +1,191 @@
+@import "tailwindcss";
+
+/* ---- CSS Custom Properties ---- */
+:root {
+  /* Light mode */
+  --background: #fafaf9;
+  --surface: #ffffff;
+  --foreground: #111827;
+  --muted: #6b7280;
+  --border: #e5e7eb;
+
+  --accent-primary: #ea580c;
+  --accent-secondary: #059669;
+  --accent-tertiary: #7c3aed;
+
+  --accent-primary-rgb: 234, 88, 12;
+  --accent-secondary-rgb: 5, 150, 105;
+  --accent-tertiary-rgb: 124, 58, 237;
+}
+
+.dark {
+  --background: #0a0f1e;
+  --surface: #111827;
+  --foreground: #f9fafb;
+  --muted: #9ca3af;
+  --border: #1f2937;
+
+  --accent-primary: #f97316;
+  --accent-secondary: #10b981;
+  --accent-tertiary: #8b5cf6;
+
+  --accent-primary-rgb: 249, 115, 22;
+  --accent-secondary-rgb: 16, 185, 129;
+  --accent-tertiary-rgb: 139, 92, 246;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-accent-primary: var(--accent-primary);
+  --color-accent-secondary: var(--accent-secondary);
+  --color-accent-tertiary: var(--accent-tertiary);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+/* ---- Base ---- */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  antialiased: true;
+}
+
+/* ---- Scrollbar ---- */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--accent-primary);
+  border-radius: 3px;
+}
+
+/* ---- Selection ---- */
+::selection {
+  background: rgba(var(--accent-primary-rgb), 0.3);
+  color: var(--foreground);
+}
+
+/* ---- Animations ---- */
+@keyframes aurora {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes bounce-gentle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(8px); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes border-spin {
+  from { --border-angle: 0deg; }
+  to { --border-angle: 360deg; }
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes marquee-reverse {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+
+@keyframes flip {
+  0% { transform: rotateY(0deg); }
+  100% { transform: rotateY(180deg); }
+}
+
+@keyframes sparkle {
+  0%, 100% { opacity: 0; transform: scale(0) rotate(0deg); }
+  50% { opacity: 1; transform: scale(1) rotate(180deg); }
+}
+
+@keyframes piano-pop {
+  0% { transform: scaleY(1); }
+  50% { transform: scaleY(0.9); }
+  100% { transform: scaleY(1); }
+}
+
+.animate-aurora { animation: aurora 8s ease infinite; }
+.animate-float { animation: float 3s ease-in-out infinite; }
+.animate-spin-slow { animation: spin-slow 8s linear infinite; }
+.animate-bounce-gentle { animation: bounce-gentle 1.5s ease-in-out infinite; }
+.animate-shimmer { animation: shimmer 2s linear infinite; }
+.animate-marquee { animation: marquee 30s linear infinite; }
+.animate-marquee-reverse { animation: marquee-reverse 30s linear infinite; }
+.animate-sparkle { animation: sparkle 1.5s ease-in-out infinite; }
+.animate-piano-pop { animation: piano-pop 0.15s ease; }
+
+/* ---- Glassmorphism ---- */
+.glass {
+  background: rgba(var(--accent-primary-rgb), 0.04);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+}
+
+/* ---- Timeline ---- */
+.timeline-line {
+  background: linear-gradient(
+    to bottom,
+    var(--accent-primary),
+    var(--accent-secondary),
+    var(--accent-tertiary)
+  );
+}
+
+/* ---- Gradient text ---- */
+.gradient-text {
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-tertiary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ---- Custom cursor (hide default on non-touch) ---- */
+@media (pointer: fine) {
+  * { cursor: none !important; }
+}
+
+/* ---- Focus ring ---- */
+:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 2px;
+}
+
+/* ---- Reduced motion ---- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
