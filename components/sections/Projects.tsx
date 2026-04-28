@@ -1,6 +1,7 @@
 "use client";
-import { motion } from "framer-motion";
-import { GitBranch, ExternalLink } from "lucide-react";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { GitBranch, ExternalLink, Play, X } from "lucide-react";
 import { BlurFade } from "@/components/ui/blur-fade";
 import { MagicCard } from "@/components/ui/magic-card";
 import { BorderBeam } from "@/components/ui/border-beam";
@@ -14,7 +15,50 @@ const accentColors: Record<string, string> = {
   climit: "var(--accent-secondary)",
 };
 
+function DemoModal({ url, title, onClose }: { url: string; title: string; onClose: () => void }) {
+  return (
+    <AnimatePresence>
+      <motion.div
+        className="fixed inset-0 z-50 flex items-center justify-center p-4"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        onClick={onClose}
+      >
+        <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" />
+        <motion.div
+          className="relative z-10 w-full max-w-3xl rounded-2xl overflow-hidden border border-[var(--border)] bg-[var(--background)]"
+          initial={{ scale: 0.95, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          exit={{ scale: 0.95, opacity: 0 }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="flex items-center justify-between px-5 py-3 border-b border-[var(--border)]">
+            <span className="text-sm font-medium text-[var(--foreground)]">{title} — demo</span>
+            <button
+              onClick={onClose}
+              className="p-1.5 rounded-lg hover:bg-[var(--surface)] text-[var(--muted)] hover:text-[var(--foreground)] transition-colors"
+            >
+              <X size={16} />
+            </button>
+          </div>
+          <div className="aspect-video w-full">
+            <iframe
+              src={url}
+              className="w-full h-full"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+          </div>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
+  );
+}
+
 export function Projects() {
+  const [activeDemo, setActiveDemo] = useState<{ url: string; title: string } | null>(null);
+
   return (
     <section id="projects" className="py-24 bg-[var(--surface)]">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
@@ -104,6 +148,16 @@ export function Projects() {
                         Live
                       </a>
                     )}
+                    {project.demoVideo && (
+                      <button
+                        onClick={() => setActiveDemo({ url: project.demoVideo!, title: project.name })}
+                        className="flex items-center gap-1.5 text-sm transition-colors"
+                        style={{ color }}
+                      >
+                        <Play size={14} />
+                        Demo
+                      </button>
+                    )}
                   </div>
                 </MagicCard>
               </BlurFade>
@@ -111,6 +165,14 @@ export function Projects() {
           })}
         </div>
       </div>
+
+      {activeDemo && (
+        <DemoModal
+          url={activeDemo.url}
+          title={activeDemo.title}
+          onClose={() => setActiveDemo(null)}
+        />
+      )}
     </section>
   );
 }

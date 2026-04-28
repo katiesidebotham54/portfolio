@@ -30,82 +30,101 @@ function ExperienceCard({
     >
       {exp.featured && <BorderBeam duration={8} colorFrom="var(--accent-primary)" colorTo="var(--accent-tertiary)" />}
 
-        {/* Header */}
-        <div className="flex items-start justify-between gap-4 mb-4">
-          <div className="flex items-start gap-4">
-            {/* Logo */}
-            <div className="w-10 h-10 rounded-xl bg-white border border-[var(--border)] flex items-center justify-center shrink-0 overflow-hidden">
-              {exp.logoUrl ? (
-                <Image src={exp.logoUrl} alt={exp.company} width={28} height={28} className="object-contain" />
-              ) : (
-                <span className="font-bold text-[var(--accent-primary)] text-sm">{exp.logo}</span>
-              )}
-            </div>
-            <div>
-              <div className="flex items-center gap-2 flex-wrap">
-                <h3 className="font-bold text-[var(--foreground)] text-base">{exp.role}</h3>
-                {exp.featured && (
-                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-yellow-400/10 border border-yellow-400/30 text-yellow-500 text-xs font-semibold">
-                    <Trophy size={10} />
-                    {exp.award}
-                  </span>
-                )}
-              </div>
-              <p className="text-sm text-[var(--accent-primary)] font-medium">{exp.company}</p>
-              <p className="text-xs text-[var(--muted)] mt-0.5">
-                {exp.location} · {exp.type}
-              </p>
-            </div>
+      {/* Header */}
+      <div className="flex items-start gap-4 mb-4">
+        {/* Logo */}
+        <div className="w-10 h-10 rounded-xl bg-white border border-[var(--border)] flex items-center justify-center shrink-0 overflow-hidden">
+          {exp.logoUrl ? (
+            <Image src={exp.logoUrl} alt={exp.company} width={28} height={28} className="object-contain" />
+          ) : (
+            <span className="font-bold text-[var(--accent-primary)] text-sm">{exp.logo}</span>
+          )}
+        </div>
+
+        {/* Info — grows to fill space */}
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 flex-wrap">
+            <h3 className="font-bold text-[var(--foreground)] text-base">{exp.role}</h3>
+            {exp.featured && (
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-yellow-400/10 border border-yellow-400/30 text-yellow-500 text-xs font-semibold">
+                <Trophy size={10} />
+                {exp.award}
+              </span>
+            )}
           </div>
+          <p className="text-sm text-[var(--accent-primary)] font-medium">{exp.company}</p>
+          <p className="text-xs text-[var(--muted)] mt-0.5">
+            {exp.location} · {exp.type}
+            {/* Date inline when photo takes the right column */}
+            {exp.photo ? ` · ${exp.start} – ${exp.end}` : ""}
+          </p>
+        </div>
+
+        {/* Right column: award photo OR date */}
+        {exp.photo ? (
+          <motion.div
+            className="shrink-0 relative w-20 h-28 rounded-xl overflow-hidden shadow-lg"
+            style={{ rotate: "2deg", border: "2px solid rgba(255,255,255,0.15)" }}
+            whileHover={{ scale: 1.06, rotate: 0, transition: { duration: 0.2 } }}
+          >
+            <Image
+              src={exp.photo}
+              alt={exp.photoAlt ?? ""}
+              fill
+              className="object-cover"
+            />
+          </motion.div>
+        ) : (
           <div className="shrink-0 text-xs text-[var(--muted)] font-mono whitespace-nowrap">
             {exp.start} - {exp.end}
           </div>
-        </div>
+        )}
+      </div>
 
-        {/* Bullets */}
-        <div
-          className={cn(
-            "overflow-hidden transition-all duration-300",
-            expanded ? "max-h-96" : "max-h-20"
-          )}
-        >
-          <ul className="space-y-1.5">
-            {exp.bullets.map((bullet, i) => (
-              <li key={i} className="flex items-start gap-2 text-sm text-[var(--muted)]">
-                <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-[var(--accent-secondary)] shrink-0" />
-                {bullet}
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* Tech stack */}
-        <div className="flex flex-wrap gap-1.5 mt-4">
-          {exp.tech.map((t) => (
-            <span
-              key={t}
-              className="px-2 py-0.5 rounded-md bg-[var(--background)] border border-[var(--border)] text-xs text-[var(--muted)] font-mono"
-            >
-              {t}
-            </span>
+      {/* Bullets */}
+      <div
+        className={cn(
+          "overflow-hidden transition-all duration-300",
+          expanded ? "max-h-[800px]" : "max-h-[4.5rem]"
+        )}
+      >
+        <ul className="space-y-1.5">
+          {exp.bullets.map((bullet, i) => (
+            <li key={i} className="flex items-start gap-2 text-sm text-[var(--muted)]">
+              <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-[var(--accent-secondary)] shrink-0" />
+              {bullet}
+            </li>
           ))}
-        </div>
+        </ul>
+      </div>
 
-        {/* Expand button */}
-        <button
-          onClick={() => setExpanded(!expanded)}
-          className="mt-3 flex items-center gap-1 text-xs text-[var(--accent-primary)] hover:brightness-110 transition-all"
-        >
-          {expanded ? (
-            <>
-              <ChevronUp size={12} /> Less
-            </>
-          ) : (
-            <>
-              <ChevronDown size={12} /> More
-            </>
-          )}
-        </button>
+      {/* Tech stack */}
+      <div className="flex flex-wrap gap-1.5 mt-4">
+        {exp.tech.map((t) => (
+          <span
+            key={t}
+            className="px-2 py-0.5 rounded-md bg-[var(--background)] border border-[var(--border)] text-xs text-[var(--muted)] font-mono"
+          >
+            {t}
+          </span>
+        ))}
+      </div>
+
+      {/* Expand button */}
+      <button
+        onClick={() => setExpanded(!expanded)}
+        className="mt-3 flex items-center gap-1 text-xs text-[var(--accent-primary)] hover:brightness-110 transition-all"
+      >
+        {expanded ? (
+          <>
+            <ChevronUp size={12} /> Less
+          </>
+        ) : (
+          <>
+            <ChevronDown size={12} /> More
+          </>
+        )}
+      </button>
     </div>
   );
 

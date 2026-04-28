@@ -1,10 +1,10 @@
 "use client";
-import { useState, useEffect, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useState } from "react";
+import { motion } from "framer-motion";
 import { BlurFade } from "@/components/ui/blur-fade";
 import { LucideIcon } from "@/components/ui/lucide-icon";
 import { interests } from "@/lib/data";
+import { cn } from "@/lib/utils";
 
 // ---- Web Audio piano ----
 const NOTES: Record<number, number> = {
@@ -37,16 +37,16 @@ function PianoKeys() {
     setTimeout(() => setPressed(null), 200);
   };
   return (
-    <div className="flex gap-1 mt-4">
+    <div className="flex gap-1.5 mt-4">
       {Object.keys(NOTES).map((_, i) => (
         <button
           key={i}
           onMouseDown={() => handleKey(i)}
           onTouchStart={(e) => { e.preventDefault(); handleKey(i); }}
-          className="w-10 h-20 rounded-b-lg border border-white/20 text-xs font-mono flex items-end justify-center pb-2 transition-all duration-75 select-none"
+          className="flex-1 h-14 rounded-b-lg border border-white/20 text-xs font-mono flex items-end justify-center pb-1.5 transition-all duration-75 select-none"
           style={{
             background: pressed === i ? "var(--accent-primary)" : "rgba(255,255,255,0.12)",
-            color: pressed === i ? "white" : "rgba(255,255,255,0.6)",
+            color: pressed === i ? "white" : "rgba(255,255,255,0.5)",
             transform: pressed === i ? "scaleY(0.95)" : "scaleY(1)",
           }}
         >
@@ -57,191 +57,132 @@ function PianoKeys() {
   );
 }
 
-// ---- Slide variants ----
-const variants = {
-  enter: (dir: number) => ({ x: dir > 0 ? 300 : -300, opacity: 0 }),
-  center: { x: 0, opacity: 1 },
-  exit: (dir: number) => ({ x: dir > 0 ? -300 : 300, opacity: 0 }),
-};
+// Bento layout — ordered render list with col/row spans
+// Desktop (4-col):
+//   Row 1-2: [hike 2×2]  [camera 1×2]   [foodie 1×2]
+//   Row 3-4: [piano 2×2] [icecream 1×2] [baking 1×2]
+//   Row 5:   [pickle 1×1] [weights 1×1] [sudoku 1×1] [puzzle 1×1]
+const bentoLayout: Array<{ type: string; col: 1 | 2; row: 1 | 2 }> = [
+  { type: "hike",       col: 2, row: 2 },
+  { type: "camera",     col: 1, row: 2 },
+  { type: "foodie",     col: 1, row: 2 },
+  { type: "piano",      col: 2, row: 2 },
+  { type: "icecream",   col: 1, row: 2 },
+  { type: "baking",     col: 1, row: 2 },
+  { type: "pickleball", col: 1, row: 1 },
+  { type: "weights",    col: 1, row: 1 },
+  { type: "sudoku",     col: 1, row: 1 },
+  { type: "puzzle",     col: 1, row: 1 },
+];
+
+const interestMap = Object.fromEntries(interests.map((item) => [item.type, item]));
+
+type InterestItem = (typeof interests)[number];
 
 export function Interests() {
-  const [index, setIndex] = useState(0);
-  const [dir, setDir] = useState(1);
-  const [paused, setPaused] = useState(false);
-
-  const go = useCallback((next: number, direction: number) => {
-    setDir(direction);
-    setIndex((((next) % interests.length) + interests.length) % interests.length);
-  }, []);
-
-  const prev = () => go(index - 1, -1);
-  const next = () => go(index + 1, 1);
-
-  // Auto-advance every 4s
-  useEffect(() => {
-    if (paused) return;
-    const t = setTimeout(() => go(index + 1, 1), 4000);
-    return () => clearTimeout(t);
-  }, [index, paused, go]);
-
-  const item = interests[index];
-
   return (
     <section id="interests" className="py-24 max-w-6xl mx-auto px-4 sm:px-6">
       <BlurFade>
-        <div className="flex items-center gap-3 mb-4">
+        <div className="flex items-center gap-3 mb-12">
           <h2 className="text-3xl sm:text-4xl font-bold text-[var(--foreground)] lowercase">interests</h2>
           <div className="flex-1 h-px bg-[var(--border)]" />
         </div>
-        <p className="text-sm text-[var(--muted)] mb-10">Drag or use arrows to explore</p>
       </BlurFade>
 
       <BlurFade delay={0.1}>
         <div
-          className="relative"
-          onMouseEnter={() => setPaused(true)}
-          onMouseLeave={() => setPaused(false)}
+          className="grid grid-cols-2 md:grid-cols-4 gap-3"
+          style={{ gridAutoRows: "170px" }}
         >
-          {/* Main carousel card */}
-          <div className="relative aspect-[4/3] rounded-3xl overflow-hidden">
-            <AnimatePresence custom={dir} mode="popLayout">
-              <motion.div
-                key={index}
-                custom={dir}
-                variants={variants}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                transition={{ duration: 0.35, ease: [0.32, 0, 0.67, 0] }}
-                drag="x"
-                dragConstraints={{ left: 0, right: 0 }}
-                dragElastic={0.1}
-                onDragEnd={(_, info) => {
-                  if (info.offset.x < -60) next();
-                  else if (info.offset.x > 60) prev();
-                }}
-                className="absolute inset-0 select-none"
-                style={{ cursor: "grab" }}
-              >
-                {/* Background: photo if available, else gradient placeholder */}
-                {item.image ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={item.image}
-                    alt={item.label}
-                    loading="lazy"
-                    draggable={false}
-                    className="absolute inset-0 w-full h-full object-cover object-center"
-                  />
-                ) : (
-                  <div
-                    className="absolute inset-0"
-                    style={{
-                      background: `radial-gradient(ellipse at 30% 40%, ${item.accent}30 0%, transparent 60%),
-                                   radial-gradient(ellipse at 70% 70%, ${item.accent}18 0%, transparent 50%),
-                                   var(--surface)`,
-                    }}
-                  />
-                )}
-
-                {/* Overlay gradient for text legibility */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-
-                {/* Content */}
-                <div className="absolute inset-0 flex flex-col justify-end p-8">
-                  <div
-                    className="mb-3 drop-shadow-lg"
-                    style={{ color: item.accent, filter: "drop-shadow(0 2px 8px rgba(0,0,0,0.5))" }}
-                  >
-                    <LucideIcon name={item.icon} size={52} strokeWidth={1.5} />
-                  </div>
-                  <h3 className="text-3xl sm:text-4xl font-bold text-white drop-shadow-lg mb-1">
-                    {item.label}
-                  </h3>
-                  {!item.image && (
-                    <p className="text-sm text-white/50 italic">Photo coming soon</p>
-                  )}
-
-                  {/* Piano keys overlay */}
-                  {item.type === "piano" && <PianoKeys />}
-                </div>
-
-                {/* Accent top bar */}
-                <div
-                  className="absolute top-0 left-0 right-0 h-1"
-                  style={{ background: item.accent }}
-                />
-              </motion.div>
-            </AnimatePresence>
-
-            {/* Arrow buttons */}
-            <button
-              onClick={prev}
-              className="absolute left-4 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-black/40 backdrop-blur-sm border border-white/10 flex items-center justify-center text-white hover:bg-black/60 transition-all duration-200"
-              aria-label="Previous"
-            >
-              <ChevronLeft size={18} />
-            </button>
-            <button
-              onClick={next}
-              className="absolute right-4 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-black/40 backdrop-blur-sm border border-white/10 flex items-center justify-center text-white hover:bg-black/60 transition-all duration-200"
-              aria-label="Next"
-            >
-              <ChevronRight size={18} />
-            </button>
-          </div>
-
-          {/* Dot indicators */}
-          <div className="flex justify-center gap-2 mt-5">
-            {interests.map((interest, i) => (
-              <button
-                key={interest.type}
-                onClick={() => go(i, i > index ? 1 : -1)}
-                aria-label={interest.label}
-                className="transition-all duration-300 rounded-full"
-                style={{
-                  width: i === index ? 24 : 8,
-                  height: 8,
-                  background: i === index ? item.accent : "var(--border)",
-                }}
-              />
-            ))}
-          </div>
-
-          {/* Thumbnail strip */}
-          <div className="flex gap-3 mt-5 overflow-x-auto pb-2 scrollbar-hide">
-            {interests.map((interest, i) => (
-              <button
-                key={interest.type}
-                onClick={() => go(i, i > index ? 1 : -1)}
-                className="shrink-0 w-16 h-16 rounded-xl overflow-hidden border-2 transition-all duration-200"
-                style={{
-                  borderColor: i === index ? interest.accent : "transparent",
-                  opacity: i === index ? 1 : 0.5,
-                }}
-                aria-label={interest.label}
-              >
-                {interest.image ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={interest.image}
-                    alt={interest.label}
-                    loading="lazy"
-                    className="object-cover w-full h-full"
-                  />
-                ) : (
-                  <div
-                    className="w-full h-full flex items-center justify-center"
-                    style={{ background: `${interest.accent}20`, color: interest.accent }}
-                  >
-                    <LucideIcon name={interest.icon} size={24} strokeWidth={1.5} />
-                  </div>
-                )}
-              </button>
-            ))}
-          </div>
+          {bentoLayout.map(({ type, col, row }, i) => {
+            const item = interestMap[type];
+            if (!item) return null;
+            return <BentoTile key={type} item={item} col={col} row={row} index={i} />;
+          })}
         </div>
       </BlurFade>
     </section>
+  );
+}
+
+function BentoTile({
+  item,
+  col,
+  row,
+  index,
+}: {
+  item: InterestItem;
+  col: 1 | 2;
+  row: 1 | 2;
+  index: number;
+}) {
+  const isPiano = item.type === "piano";
+  const isLarge = row === 2;
+
+  return (
+    <motion.div
+      className={cn(
+        "relative rounded-2xl overflow-hidden",
+        col === 2 ? "col-span-2" : "col-span-1",
+        // Piano is always 2 rows so keys fit; other tall items only on md+
+        isPiano ? "row-span-2" : isLarge ? "row-span-1 md:row-span-2" : "row-span-1"
+      )}
+      initial={{ opacity: 0, y: 16 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ delay: index * 0.05, duration: 0.45, ease: [0.25, 0.46, 0.45, 0.94] }}
+      whileHover={{ scale: 1.025, zIndex: 10, transition: { duration: 0.18 } }}
+    >
+      {/* Background */}
+      {item.image ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={item.image}
+          alt={item.label}
+          loading="lazy"
+          draggable={false}
+          className="absolute inset-0 w-full h-full object-cover select-none"
+        />
+      ) : (
+        <div
+          className="absolute inset-0"
+          style={{
+            background: `radial-gradient(ellipse at 25% 35%, ${item.accent}40 0%, transparent 60%),
+                         radial-gradient(ellipse at 78% 75%, ${item.accent}22 0%, transparent 50%),
+                         var(--surface)`,
+          }}
+        />
+      )}
+
+      {/* Dark overlay for readability on photo tiles */}
+      {item.image && (
+        <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-black/5" />
+      )}
+
+      {/* Accent top line */}
+      <div
+        className="absolute top-0 left-0 right-0 h-0.5 z-10"
+        style={{ background: item.accent }}
+      />
+
+      {/* Content */}
+      <div className="relative z-10 h-full flex flex-col justify-end p-4">
+        <div className="mb-2" style={{ color: item.image ? "white" : item.accent }}>
+          <LucideIcon name={item.icon} size={isLarge ? 32 : 22} strokeWidth={1.5} />
+        </div>
+
+        <p
+          className={cn(
+            "font-semibold leading-tight",
+            isLarge ? "text-xl" : "text-sm",
+            item.image ? "text-white" : "text-[var(--foreground)]"
+          )}
+        >
+          {item.label}
+        </p>
+
+        {isPiano && <PianoKeys />}
+      </div>
+    </motion.div>
   );
 }

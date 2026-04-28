@@ -12,8 +12,8 @@ export const siteConfig = {
 export const heroRotatingTitles = [
   "product engineer @ ridgeline",
   "building with ai since day one",
-  "innovation award winner",
-  "climate-tech co-founder",
+  "full-stack from figma to backend",
+  "perpetually building something new",
   "magna cum laude, rutgers cs",
 ];
 
@@ -24,7 +24,7 @@ export const heroStats = [
   { value: 3.73, suffix: "", label: "GPA" },
 ];
 
-export const aboutBio = `i'm a full-stack product engineer who loves building things that actually matter. by day i'm shipping enterprise software at ridgeline — i also co-founded a climate-tech startup with 35+ people and pioneered ai workflows that compress 6-week projects into 2 days. i bring technical depth, product intuition, and a genuine love for collaboration.`;
+export const aboutBio = `i'm a full-stack product engineer who loves building things that actually matter. at rutgers i studied computer science, led student organizations, and spent three years tutoring peers through data structures and algorithms — getting into problems from every angle. at ridgeline i've owned features end-to-end, built agentic ai workflows that compress multi-sprint cycles into days, and shipped across the full stack from day one. on the side i build mobile apps and explore whatever problem seems most interesting — lately that's been ai-powered travel planning and real-time pokémon card pricing from a camera.`;
 
 export const experiences = [
   {
@@ -40,12 +40,14 @@ export const experiences = [
     featured: true,
     award: "Innovation Award Winner",
     bullets: [
-      "Pioneered an agentic AI coding workflow using Claude that compressed 6-week feature cycles to under 2 days",
-      "Shipped full-stack features across the Ridgeline investment management platform used by enterprise clients",
-      "Won the company Innovation Award for AI workflow contributions recognized company-wide",
-      "Hosted engineering Show & Tell sessions and served on the Fun Squad to build team culture",
+      "Owned CD Feeds Config end-to-end as a new front-end engineer with no prior production experience — taught myself Figma to design full user flows with the PM, built the feature across multiple pages, and refactored the backend Route model with a complete data migration, eliminating 3–4 hours/week of developer involvement in client onboarding",
+      "Identified unprompted that every new direct connection took 2 sprints and multiple engineers due to repetitive, pattern-based work — built a Claude + Atlassian MCP agent to auto-generate full Jira ticket sets from connector specs and a GitHub Actions workflow with a Claude subagent that writes Kotlin code, runs linting/tests, and opens a draft PR, cutting delivery from 2 sprints to 2 days by one engineer",
+      "Sole engineer on a company-wide data table migration scoped as a full quarter — wrote the TDD, ran a POC to solve the hardest problem first, feature-flagged all changes, and independently resolved an unexpected saved views migration with the UI team; shipped in 5 sprints instead of a full quarter and was promoted to L2 within 6 months of joining",
+      "Won the Innovation Award for agentic AI workflow contributions; co-presented at Engineering Show & Tell and authored a Confluence design doc that became an adoption template for other teams",
     ],
     tech: ["TypeScript", "React", "Java", "GraphQL", "AWS", "Claude AI"],
+    photo: "/innovation-award.jpg",
+    photoAlt: "Ridgeline Innovation Award",
   },
   {
     id: "ridgeline-intern",
@@ -59,9 +61,9 @@ export const experiences = [
     end: "August 2023",
     featured: false,
     bullets: [
-      "Developed and shipped production features on the core investment management platform",
-      "Collaborated closely with senior engineers on full-stack TypeScript/React components",
-      "Received return offer after internship, converted to full-time PE II",
+      "Identified a gap in real-time trader feedback and engineered a production audio alert system for Ridgeline's trading platform — which processes tens of millions of dollars in trade executions weekly — improving user experience during high-stakes order flows",
+      "Developed 4 production APIs on a 2-person team using TypeScript, React, AWS, and Python, delivering all sprint commitments across a 10-week internship",
+      "Received a return offer after the internship and converted to a full-time Product Engineer II role",
     ],
     tech: ["TypeScript", "React", "Java", "GraphQL"],
   },
@@ -77,9 +79,9 @@ export const experiences = [
     end: "November 2022",
     featured: false,
     bullets: [
-      "Built and maintained data pipelines supporting Paramount+ streaming platform analytics",
-      "Worked on backend services handling millions of streaming events per day",
-      "Collaborated across data engineering teams to deliver reporting dashboards",
+      "Joined a data engineering team supporting Paramount+ streaming analytics and built ETL pipelines ingesting millions of streaming events per day across Kafka, Spark, and AWS",
+      "Delivered reporting dashboards used by internal stakeholders to track platform-wide streaming performance, collaborating across teams to align on data schemas and delivery timelines",
+      "Contributed to production-scale backend services over a 6-month engagement, gaining hands-on experience with real-time media consumption data infrastructure",
     ],
     tech: ["Python", "SQL", "Spark", "AWS", "Kafka"],
   },
@@ -95,9 +97,8 @@ export const experiences = [
     end: "May 2024",
     featured: false,
     bullets: [
-      "Tutored and mentored students in CS fundamentals, data structures, and algorithms",
-      "Developed supplemental learning materials and hosted weekly group study sessions",
-      "Reached 80+ students across 3 years, earning consistently high feedback scores",
+      "Identified comprehension gaps in CS fundamentals and designed supplemental learning materials and weekly group study sessions to address them, reaching 80+ students across 3 years with consistently high feedback scores",
+      "Supported students through data structures, algorithms, and introductory to advanced coursework — concurrently with two internships, two leadership roles, and a 3.73 GPA",
     ],
     tech: ["Java", "Python", "Data Structures", "Algorithms"],
   },
@@ -160,6 +161,7 @@ export const projects = [
     github: "https://github.com/katiesidebotham54/faro",
     live: null,
     image: null,
+    demoVideo: null, // YouTube or Loom embed URL — e.g. "https://www.youtube.com/embed/VIDEO_ID"
   },
   {
     id: "pokeprice",
@@ -175,6 +177,7 @@ export const projects = [
     github: "https://github.com/katiesidebotham54/pokeprice",
     live: null,
     image: null,
+    demoVideo: null, // YouTube or Loom embed URL — e.g. "https://www.youtube.com/embed/VIDEO_ID"
   },
   {
     id: "climit",
@@ -190,6 +193,7 @@ export const projects = [
     github: null,
     live: "https://newbrunswick.rutgers.edu/idea-climit#:~:text=CliMit%2C%20a%20former%20Rutgers%2Dbased,about%20effectively%20mitigating%20that%20risk.",
     image: null,
+    demoVideo: null, // YouTube or Loom embed URL — e.g. "https://www.youtube.com/embed/VIDEO_ID"
   },
 ];
 
@@ -262,11 +266,12 @@ export const leadership = [
 export const interests = [
   { label: "Piano", icon: "Piano", type: "piano", image: null, accent: "#f97316" },
   { label: "Hiking", icon: "Mountain", type: "hike", image: "/interests/hiking.jpg", accent: "#10b981" },
-  { label: "Pickleball", icon: "CircleDot", type: "pickleball", image: null, accent: "#8b5cf6" },
+  { label: "Pickleball", icon: "CircleDot", type: "pickleball", image: "/interests/pickleball.jpg", accent: "#8b5cf6" },
   { label: "Photography", icon: "Camera", type: "camera", image: "/interests/photography.jpg", accent: "#f59e0b" },
   { label: "Weightlifting", icon: "Dumbbell", type: "weights", image: null, accent: "#ef4444" },
   { label: "No-Churn Ice Cream", icon: "IceCreamCone", type: "icecream", image: "/interests/icecream.jpg", accent: "#ec4899" },
   { label: "Foodie", icon: "Utensils", type: "foodie", image: "/interests/foodie.jpg", accent: "#f97316" },
   { label: "Sudoku", icon: "Grid3x3", type: "sudoku", image: null, accent: "#84cc16" },
   { label: "Jigsaw Puzzles", icon: "Puzzle", type: "puzzle", image: null, accent: "#06b6d4" },
+  { label: "Baking", icon: "ChefHat", type: "baking", image: "/interests/baking.jpg", accent: "#f59e0b" },
 ];
