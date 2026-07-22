@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sun, Moon, Menu, X } from "lucide-react";
+import Link from "next/link";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
@@ -95,6 +96,13 @@ export function Navigation() {
                 </button>
               );
             })}
+            <div className="w-px h-4 bg-[var(--border)] mx-1" />
+            <Link
+              href="/case-study/mcp-agent"
+              className="px-3 py-1.5 rounded-md text-sm font-semibold text-[var(--accent-primary)] border border-[var(--accent-primary)]/25 hover:bg-[var(--accent-primary)]/10 transition-all duration-200 flex items-center gap-1"
+            >
+              case study →
+            </Link>
           </div>
 
           {/* Theme toggle + mobile menu */}
@@ -161,6 +169,14 @@ export function Navigation() {
                   {link.label}
                 </button>
               ))}
+              <div className="h-px bg-[var(--border)] my-1" />
+              <Link
+                href="/case-study/mcp-agent"
+                onClick={() => setMobileOpen(false)}
+                className="px-4 py-2.5 rounded-lg text-sm font-semibold text-[var(--accent-primary)] hover:bg-[var(--accent-primary)]/10 transition-all duration-200 flex items-center gap-1"
+              >
+                case study →
+              </Link>
             </div>
           </motion.div>
         )}

@@ -39,6 +39,7 @@ export const experiences = [
     end: "Present",
     featured: true,
     award: "Innovation Award Winner",
+    caseStudyUrl: "/case-study/mcp-agent",
     bullets: [
       "Owned CD Feeds Config end-to-end as a new front-end engineer with no prior production experience — taught myself Figma to design full user flows with the PM, built the feature across multiple pages, and refactored the backend Route model with a complete data migration, eliminating 3–4 hours/week of developer involvement in client onboarding",
       "Identified unprompted that every new direct connection took 2 sprints and multiple engineers due to repetitive, pattern-based work — built a Claude + Atlassian MCP agent to auto-generate full Jira ticket sets from connector specs and a GitHub Actions workflow with a Claude subagent that writes Kotlin code, runs linting/tests, and opens a draft PR, cutting delivery from 2 sprints to 2 days by one engineer",

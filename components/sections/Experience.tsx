@@ -2,8 +2,9 @@
 import { useState } from "react";
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import { ChevronDown, ChevronUp, Trophy } from "lucide-react";
+import { ChevronDown, ChevronUp, Trophy, ChevronRight } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { BlurFade } from "@/components/ui/blur-fade";
 import { BorderBeam } from "@/components/ui/border-beam";
 import { AwardConfetti } from "@/components/ui/award-confetti";
@@ -110,21 +111,31 @@ function ExperienceCard({
         ))}
       </div>
 
-      {/* Expand button */}
-      <button
-        onClick={() => setExpanded(!expanded)}
-        className="mt-3 flex items-center gap-1 text-xs text-[var(--accent-primary)] hover:brightness-110 transition-all"
-      >
-        {expanded ? (
-          <>
-            <ChevronUp size={12} /> Less
-          </>
-        ) : (
-          <>
-            <ChevronDown size={12} /> More
-          </>
+      {/* Expand + Case Study buttons */}
+      <div className="mt-3 flex items-center justify-between">
+        <button
+          onClick={() => setExpanded(!expanded)}
+          className="flex items-center gap-1 text-xs text-[var(--accent-primary)] hover:brightness-110 transition-all"
+        >
+          {expanded ? (
+            <>
+              <ChevronUp size={12} /> Less
+            </>
+          ) : (
+            <>
+              <ChevronDown size={12} /> More
+            </>
+          )}
+        </button>
+        {'caseStudyUrl' in exp && typeof exp.caseStudyUrl === 'string' && (
+          <Link
+            href={exp.caseStudyUrl}
+            className="flex items-center gap-1 text-xs text-[var(--accent-tertiary)] hover:brightness-110 transition-all font-medium"
+          >
+            View Case Study <ChevronRight size={11} />
+          </Link>
         )}
-      </button>
+      </div>
     </div>
   );
 

@@ -10,7 +10,6 @@ import { Leadership } from "@/components/sections/Leadership";
 import { Interests } from "@/components/sections/Interests";
 import { Contact } from "@/components/sections/Contact";
 import { KonamiEasterEgg } from "@/components/ui/konami-easter-egg";
-import { CursorGlow } from "@/components/ui/cursor-glow";
 
 export default function Home() {
   return (
@@ -29,7 +28,6 @@ export default function Home() {
       </main>
       <Footer />
       <KonamiEasterEgg />
-      <CursorGlow />
     </>
   );
 }
