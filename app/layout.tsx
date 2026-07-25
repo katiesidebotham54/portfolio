@@ -15,14 +15,37 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"
+  ),
   title: "Katie Sidebotham | Product Engineer",
   description:
-    "Full-stack product engineer, climate-tech co-founder, and Innovation Award winner. Building things that matter at Ridgeline Apps.",
-  keywords: ["Katie Sidebotham", "software engineer", "product engineer", "React", "TypeScript", "portfolio"],
+    "Full-stack product engineer, climate-tech co-founder, and Innovation Award winner. Building agentic AI workflows and shipping across the full stack at Ridgeline Apps.",
+  keywords: [
+    "Katie Sidebotham",
+    "product engineer",
+    "software engineer",
+    "React",
+    "TypeScript",
+    "AI",
+    "agentic workflows",
+    "Claude AI",
+    "MCP",
+    "Kotlin",
+    "full-stack",
+    "portfolio",
+  ],
   openGraph: {
     title: "Katie Sidebotham | Product Engineer",
-    description: "Full-stack product engineer, climate-tech co-founder, and Innovation Award winner.",
+    description:
+      "Full-stack product engineer, climate-tech co-founder, and Innovation Award winner. Building agentic AI workflows and shipping across the full stack at Ridgeline Apps.",
     type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Katie Sidebotham | Product Engineer",
+    description:
+      "Full-stack product engineer, climate-tech co-founder, and Innovation Award winner.",
   },
 };
 
